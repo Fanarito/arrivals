@@ -18,7 +18,7 @@ defmodule Arrivals.Flight do
   end
 
   def closest_flights_today(query) do
-    now = Timex.now()
+    now = Timex.now |> Timex.shift(minutes: -30)
     from f in query,
       join: s in assoc(f, :status),
       where: (f.scheduled_time > ^now or f.real_time > ^now) and (not is_nil(f.real_time) or s.type == "Cancelled"),
@@ -26,13 +26,13 @@ defmodule Arrivals.Flight do
   end
 
   def flights_landed_recently(query) do
-    today = Timex.today()
-    yesterday = Timex.shift(today, days: -1)
+    today = Timex.now
+    yesterday = today |> Timex.shift(days: -1)
     from f in query,
       join: s in assoc(f, :status),
       where: s.type == "Landed" or s.type == "None",
       where: f.scheduled_time > ^yesterday or f.real_time > ^yesterday,
-      order_by: [desc: fragment("-?", f.real_time), asc: s.type, asc: f.scheduled_time]
+      order_by: [asc: f.real_time, asc: f.scheduled_time]
   end
 
   def standard_view(query) do
