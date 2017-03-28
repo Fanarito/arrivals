@@ -15,6 +15,7 @@ defmodule Arrivals.FlightController do
       |> Flight.flights_landed_recently
       |> Arrivals.Repo.all
     )
+    |> Enum.uniq
 
     conn
     |> render(:index, flights: flights)
