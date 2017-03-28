@@ -7,11 +7,16 @@ defmodule Arrivals.FlightController do
   require Logger
 
   def index(conn, _params) do
-    flights = Flight.standard_view(from f in Flight) |> Flight.sorted |> Arrivals.Repo.all
+    flights = Flight.standard_view(from f in Flight)
+    |> Flight.closest_flights_today
+    |> Arrivals.Repo.all
+    |> Enum.concat(
+      Flight.standard_view(from f in Flight)
+      |> Flight.flights_landed_recently
+      |> Arrivals.Repo.all
+    )
 
     conn
-    |> put_flash(:info, "Some info")
-    |> put_flash(:error, "Some erros")
-    |> render("index.html", flights: flights)
+    |> render(:index, flights: flights)
   end
 end

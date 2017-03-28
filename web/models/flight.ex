@@ -17,11 +17,22 @@ defmodule Arrivals.Flight do
     belongs_to :status, Status
   end
 
-  def sorted(query) do
-    today = Timex.today()
+  def closest_flights_today(query) do
+    now = Timex.now()
     from f in query,
-      where: f.date == ^today,
-      order_by: [asc: f.real_time, asc: f.scheduled_time]
+      join: s in assoc(f, :status),
+      where: (f.scheduled_time > ^now or f.real_time > ^now) and (not is_nil(f.real_time) or s.type == "Cancelled"),
+      order_by: [asc: f.real_time]
+  end
+
+  def flights_landed_recently(query) do
+    today = Timex.today()
+    yesterday = Timex.shift(today, days: -1)
+    from f in query,
+      join: s in assoc(f, :status),
+      where: s.type == "Landed" or s.type == "None",
+      where: f.scheduled_time > ^yesterday or f.real_time > ^yesterday,
+      order_by: [desc: fragment("-?", f.real_time), asc: s.type, asc: f.scheduled_time]
   end
 
   def standard_view(query) do
