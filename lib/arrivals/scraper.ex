@@ -123,6 +123,7 @@ defmodule Scraper do
 
     flight = Arrivals.Repo.get!(Arrivals.Flight, flight_id)
     flight = Ecto.Changeset.change(flight, %{real_time: re_time, status_id: status_id})
+    Arrivals.Repo.update(flight)
   end
 
   # Inserts status if ther is no status with the same type

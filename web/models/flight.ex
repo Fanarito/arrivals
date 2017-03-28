@@ -1,5 +1,10 @@
 defmodule Arrivals.Flight do
   use Arrivals.Web, :model
+  use Timex
+  import Ecto.Query
+  alias Arrivals.Airline
+  alias Arrivals.Location
+  alias Arrivals.Status
 
   schema "flights" do
     field :date, Timex.Ecto.Date
@@ -7,9 +12,31 @@ defmodule Arrivals.Flight do
     field :scheduled_time, Timex.Ecto.DateTime
     field :real_time, Timex.Ecto.DateTime
 
-    belongs_to :location, Arrivals.Location
-    belongs_to :airline, Arrivals.Airline
-    belongs_to :status, Arrivals.Status
+    belongs_to :location, Location
+    belongs_to :airline, Airline
+    belongs_to :status, Status
+  end
+
+  def sorted(query) do
+    today = Timex.today()
+    from f in query,
+      where: f.date == ^today,
+      order_by: [asc: f.real_time, asc: f.scheduled_time]
+  end
+
+  def standard_view(query) do
+    from f in query,
+      join: s in assoc(f, :status),
+      join: l in assoc(f, :location),
+      join: a in assoc(f, :airline),
+      select: %{
+        date: f.date,
+        number: f.number,
+        location: l.name,
+        scheduled_time: f.scheduled_time,
+        real_time: f.real_time,
+        status: s.type
+      }
   end
 
   def changeset(struct, params \\ %{}) do
