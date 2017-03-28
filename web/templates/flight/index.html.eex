@@ -6,6 +6,7 @@
         <tr>
             <th>Date</th>
             <th>Number</th>
+            <th>Airline</th>
             <th>From</th>
             <th>Sc. Time</th>
             <th>Re. Time</th>
@@ -17,6 +18,7 @@
         <tr>
             <td><%= flight.date %></td>
             <td><%= flight.number %></td>
+            <td><%= flight.airline %></td>
             <td><%= flight.location %></td>
             <td><%= flight.scheduled_time %></td>
             <td><%= flight.real_time %></td>

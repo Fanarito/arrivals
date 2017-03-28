@@ -43,6 +43,7 @@ defmodule Arrivals.Flight do
       select: %{
         date: f.date,
         number: f.number,
+        airline: a.name,
         location: l.name,
         scheduled_time: f.scheduled_time,
         real_time: f.real_time,
