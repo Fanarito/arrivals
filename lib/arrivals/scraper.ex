@@ -9,8 +9,7 @@ defmodule Scraper do
   end
 
   def init(state) do
-    Process.send(self(), :work)
-    schedule_work()
+    handle_info(:work, state)
     {:ok, state}
   end
 
