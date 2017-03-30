@@ -54,7 +54,7 @@ defmodule Arrivals.Flight do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name])
-    |> validate_required([:name])
+    |> cast(params, [:name, :number, :scheduled_time])
+    |> validate_required([:name, :number, :scheduled_time])
   end
 end

@@ -1,0 +1,9 @@
+<div class="ui stackable three column container grid">
+    {{#each model as |flight|}}
+        <div class="column">
+            {{flight-card flight=flight}}
+        </div>
+    {{/each}}
+</div>
+
+{{outlet}}

@@ -9,7 +9,7 @@ defmodule Arrivals.Status do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:type])
-    |> validate_required([:type])
+    |> cast(params, [:name])
+    |> validate_required([:name])
   end
 end
