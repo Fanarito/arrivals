@@ -38,5 +38,7 @@ defmodule Arrivals.Endpoint do
     key: "_arrivals_key",
     signing_salt: "EeLwxK0m"
 
+  plug CORSPlug
+
   plug Arrivals.Router
 end

@@ -74,7 +74,7 @@ defmodule Scraper do
     flights_yesterday = Arrivals.Repo.one(
       from f in Arrivals.Flight,
       join: s in assoc(f, :status),
-      where: f.number == ^number and f.date == ^yesterday and s.type != "Cancelled" and s.type != "Landed",
+      where: f.number == ^number and f.date == ^yesterday and s.name != "Cancelled" and s.name != "Landed",
       select: f
     )
 
@@ -126,16 +126,16 @@ defmodule Scraper do
     Arrivals.Repo.update(flight)
   end
 
-  # Inserts status if ther is no status with the same type
-  def insert_status(status_type) do
+  # Inserts status if ther is no status with the same name
+  def insert_status(status_name) do
     status = Arrivals.Repo.one(
       from s in Arrivals.Status,
-      where: s.type == ^status_type,
+      where: s.name == ^status_name,
       select: s
     )
     case status do
       nil ->
-        inserted = Arrivals.Repo.insert!(%Arrivals.Status{type: status_type})
+        inserted = Arrivals.Repo.insert!(%Arrivals.Status{name: status_name})
         inserted.id
       _ ->
         status.id

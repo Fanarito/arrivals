@@ -21,7 +21,7 @@ defmodule Arrivals.Flight do
     now = Timex.now |> Timex.shift(minutes: -30)
     from f in query,
       join: s in assoc(f, :status),
-      where: (f.scheduled_time > ^now or f.real_time > ^now) and (not is_nil(f.real_time) or s.type == "Cancelled"),
+      where: (f.scheduled_time > ^now or f.real_time > ^now) and (not is_nil(f.real_time) or s.name == "Cancelled"),
       order_by: [asc: f.real_time]
   end
 
@@ -30,7 +30,7 @@ defmodule Arrivals.Flight do
     yesterday = today |> Timex.shift(days: -1)
     from f in query,
       join: s in assoc(f, :status),
-      where: s.type == "Landed" or s.type == "None",
+      where: s.name == "Landed" or s.name == "None",
       where: f.scheduled_time > ^yesterday or f.real_time > ^yesterday,
       order_by: [asc: f.real_time, asc: f.scheduled_time]
   end
@@ -41,13 +41,14 @@ defmodule Arrivals.Flight do
       join: l in assoc(f, :location),
       join: a in assoc(f, :airline),
       select: %{
+        id: f.id,
         date: f.date,
         number: f.number,
-        airline: a.name,
-        location: l.name,
+        airline: a,
+        location: l,
         scheduled_time: f.scheduled_time,
         real_time: f.real_time,
-        status: s.type
+        status: s
       }
   end
 

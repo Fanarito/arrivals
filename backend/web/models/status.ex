@@ -2,7 +2,7 @@ defmodule Arrivals.Status do
   use Arrivals.Web, :model
 
   schema "status" do
-    field :type, :string
+    field :name, :string
 
     has_many :flights, Arrivals.Flight
   end

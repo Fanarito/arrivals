@@ -1,19 +1,21 @@
+# Backend
+
 # App artifacts
-/_build
-/db
-/deps
-/*.ez
+backend/_build
+backend/db
+backend/deps
+backend/*.ez
 
 # Generated on crash by the VM
-erl_crash.dump
+backend/erl_crash.dump
 
 # Static artifacts
-/node_modules
+backend/node_modules
 
 # Since we are building assets from web/static,
 # we ignore priv/static. You may want to comment
 # this depending on your deployment strategy.
-/priv/static/
+backend/priv/static/
 
 # The config/prod.secret.exs file by default contains sensitive
 # data and you should not commit it into version control.
@@ -21,4 +23,25 @@ erl_crash.dump
 # Alternatively, you may comment the line below and commit the
 # secrets file as long as you replace its contents by environment
 # variables.
-/config/prod.secret.exs
+backend/config/prod.secret.exs
+
+# UI
+
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+ui/dist
+ui/tmp
+
+# dependencies
+ui/node_modules
+ui/bower_components
+
+# misc
+ui/.sass-cache
+ui/connect.lock
+ui/coverage/*
+ui/libpeerconnection.log
+ui/npm-debug.log*
+ui/testem.log
+/home/fanarito/Documents/projects/arrivals-old-rethinkdb/.gitignore

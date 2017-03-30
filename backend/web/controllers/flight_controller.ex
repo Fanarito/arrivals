@@ -18,6 +18,6 @@ defmodule Arrivals.FlightController do
     |> Enum.uniq
 
     conn
-    |> render(:index, flights: flights)
+    |> render("index.json-api", data: flights)
   end
 end

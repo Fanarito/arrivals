@@ -10,7 +10,7 @@ defmodule Arrivals.Router do
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug :accepts, ["json", "json-api"]
   end
 
   scope "/", Arrivals do
@@ -25,5 +25,6 @@ defmodule Arrivals.Router do
     pipe_through :api
 
     resources "/flights", FlightController, only: [:index]
+    resources "/airlines", AirlineController, only: [:index]
   end
 end
