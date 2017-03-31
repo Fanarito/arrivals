@@ -17,6 +17,11 @@ module.exports = function(environment) {
       }
     },
 
+    DS: {
+      host: 'http://localhost:4000',
+      namespace: 'api'
+    },
+
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
@@ -43,7 +48,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-
+    ENV.DS.host = '/';
   }
 
   return ENV;

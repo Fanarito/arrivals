@@ -8,6 +8,11 @@ export default Ember.Component.extend({
     updateList: function () {
       let keyword = this.get('searchKeyword');
 
+      if (keyword == "") {
+        this.set('filteredFlights', this.get('flights'));
+        return;
+      }
+
       // let filtered = this.get('flights').filterBy('number', keyword);
       let filtered = this.get('flights').filter(function (item) {
         return item.get('date').toLowerCase().indexOf(keyword) > -1 ||
