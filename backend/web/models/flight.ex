@@ -17,8 +17,8 @@ defmodule Arrivals.Flight do
     belongs_to :status, Status
   end
 
-  def closest_flights_today(query) do
-    now = Timex.now |> Timex.shift(minutes: -30)
+  def closest_flights(query) do
+    now = Timex.now |> Timex.shift(minutes: -90)
     from f in query,
       join: s in assoc(f, :status),
       where: (f.scheduled_time > ^now or f.real_time > ^now) and (not is_nil(f.real_time) or s.name == "Cancelled"),

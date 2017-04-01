@@ -8,7 +8,7 @@ defmodule Arrivals.FlightController do
 
   def index(conn, _params) do
     flights = Flight.standard_view(from f in Flight)
-    |> Flight.closest_flights_today
+    |> Flight.closest_flights
     |> Arrivals.Repo.all
 
     conn
