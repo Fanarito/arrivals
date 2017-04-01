@@ -1,15 +1,42 @@
 <div class="one column row">
-    <div class="ui fluid input">
-        {{input type='text' placeholder='Filter...' value=searchKeyword}}
+    <div class="ui container">
+        <div class="ui fluid input">
+            {{input type='text' placeholder='Filter...' value=searchKeyword}}
+        </div>
     </div>
 </div>
 
 <div class="ui divider"></div>
 
 <div class="ui stackable three column container grid">
-    {{#each filteredFlights as |flight|}}
+    {{#each filteredFlights key="@index" as |flight|}}
         <div class="column">
-            {{flight-card flight=flight}}
+            <div class="ui fluid card">
+                <div class="content">
+                    <div class="header">
+                        {{flight.location.name}}
+                    </div>
+                    <div class="description">
+                        {{flight.number}} | {{flight.airline.name}}
+                        <div class="ui divider"></div>
+                        Real: {{datetime flight.real_time}}
+                        <br/>
+                        Scheduled: {{datetime flight.scheduled_time}}
+                    </div>
+                </div>
+                <div class="extra content">
+                    <div class="ui {{flight.status.colorClass}} bottom attached label">
+                        <i class="ui {{flight.status.iconClass}} icon"></i>
+                        {{flight.status.name}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{else}}
+        <div class="column">
+            <div class="ui header">
+                Sorry nothing matches your search.
+            </div>
         </div>
     {{/each}}
 </div>

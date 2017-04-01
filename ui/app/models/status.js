@@ -37,5 +37,8 @@ export default DS.Model.extend({
     default:
       return "question";
     }
+  }),
+  nameLower: Ember.computed('name', function () {
+    return this.get('name').toLowerCase();
   })
 });

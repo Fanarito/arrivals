@@ -48,7 +48,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-    ENV.DS.host = '/';
+    ENV.DS.host = 'http://api.arrivals.is';
   }
 
   return ENV;
