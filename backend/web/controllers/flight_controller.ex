@@ -10,12 +10,6 @@ defmodule Arrivals.FlightController do
     flights = Flight.standard_view(from f in Flight)
     |> Flight.closest_flights_today
     |> Arrivals.Repo.all
-    |> Enum.concat(
-      Flight.standard_view(from f in Flight)
-      |> Flight.flights_landed_recently
-      |> Arrivals.Repo.all
-    )
-    |> Enum.uniq
 
     conn
     |> render("index.json-api", data: flights)
