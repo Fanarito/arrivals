@@ -12,6 +12,8 @@ defmodule Arrivals.Flight do
     field :scheduled_time, Timex.Ecto.DateTime
     field :real_time, Timex.Ecto.DateTime
 
+    timestamps
+
     belongs_to :location, Location
     belongs_to :airline, Airline
     belongs_to :status, Status
