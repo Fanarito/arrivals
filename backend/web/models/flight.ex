@@ -23,8 +23,8 @@ defmodule Arrivals.Flight do
     now = Timex.now |> Timex.shift(minutes: -90)
     from f in query,
       join: s in assoc(f, :status),
-      where: (f.scheduled_time > ^now or f.real_time > ^now) and (not is_nil(f.real_time) or s.name == "Cancelled"),
-      order_by: [asc: f.real_time]
+      where: (f.scheduled_time > ^now or f.real_time > ^now),
+      order_by: [desc: fragment("-?", f.real_time), asc: f.scheduled_time]
   end
 
   def flights_landed_recently(query) do

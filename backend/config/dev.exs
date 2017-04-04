@@ -38,6 +38,6 @@ config :arrivals, Arrivals.Repo,
   adapter: Ecto.Adapters.MySQL,
   username: "phoenix",
   password: "phoenix",
-  database: "arrivals",
+  database: "arrivals_dev",
   hostname: "192.168.1.111",
   pool_size: 10
