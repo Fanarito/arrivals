@@ -20,9 +20,23 @@ defmodule Scraper do
   def handle_info(:work, state) do
     Logger.info "scraping now"
 
-    get_site_body!("https://www.kefairport.is/English/Timetables/Arrivals/")
-    |> get_rows
-    |> Enum.map(fn row -> parse_row(row) |> insert_flight end)
+    rows = Enum.concat(
+      get_site_body!("https://www.kefairport.is/English/Timetables/Arrivals/") |> get_rows,
+      get_site_body!("https://www.kefairport.is/English/Timetables/Arrivals/Tomorrow/") |> get_rows
+    )
+
+    # get_site_body!("https://www.kefairport.is/English/Timetables/Arrivals/")
+    # |> get_rows
+    # |> Enum.map(fn row -> parse_row(row) |> insert_flight end)
+
+    Enum.map(rows, fn row ->
+      parsed = parse_row(row)
+      if flight_delayed_over_midnight(parsed) do
+        update_delayed_flight(parsed)
+      else
+        insert_flight(parsed)
+      end
+    end)
 
     Logger.info "done scraping"
 
@@ -64,9 +78,20 @@ defmodule Scraper do
     [parsed_date, number, airline_id, location_id, parsed_sc_time, re_time, status_id]
   end
 
-  def insert_flight(flight_details) do
+  def flight_delayed_over_midnight(flight_details) do
     [date, number, airline_id, location_id, sc_time, re_time, status_id] = flight_details
 
+    re_shifted = Timex.shift(re_time, hours: 12)
+    case Timex.compare(re_shifted, sc_time) do
+      -1 ->
+        true
+      _ ->
+        false
+    end
+  end
+
+  def insert_flight(flight_details) do
+    [date, number, airline_id, location_id, sc_time, re_time, status_id] = flight_details
     yesterday = Timex.shift(date, days: -1)
 
     # Check if there where any flights yesterday with the same flight number
@@ -83,6 +108,35 @@ defmodule Scraper do
         check_flights_today(flight_details)
       _ ->
         update_flight(flights_yesterday.id, flight_details)
+    end
+  end
+
+  def update_delayed_flight(flight_details) do
+    [date, number, airline_id, location_id, sc_time, re_time, status_id] = flight_details
+    yesterday = Timex.shift(date, days: -1)
+
+    flight = Arrivals.Repo.one(
+      from f in Arrivals.Flight,
+      join: s in assoc(f, :status),
+      where: f.number == ^number and f.date == ^yesterday,
+      select: f
+    )
+
+    updated_details = [
+      Timex.shift(date, days: -1),
+      number,
+      airline_id,
+      location_id,
+      Timex.shift(sc_time, days: -1),
+      re_time,
+      status_id
+    ]
+
+    case flight do
+      nil ->
+        add_flight(updated_details)
+      _ ->
+        update_flight(flight.id, updated_details)
     end
   end
 
