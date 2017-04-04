@@ -68,6 +68,8 @@ defmodule Scraper do
     [date, number, airline, location, sc_time, status | _] =
       Floki.find(row, "td") |> Enum.concat(["None"]) |> Floki.text(sep: "|") |> String.split("|")
 
+    Logger.debug number
+
     parsed_date = parse_date(date)
     parsed_sc_time = parse_time(sc_time, parsed_date)
     [parsed_status, re_time] = parse_status(status, parsed_date)
@@ -243,14 +245,18 @@ defmodule Scraper do
   end
 
   def parse_time(scheduled_time, date) do
+    Logger.debug scheduled_time
     year = date.year
     month = date.month |> Integer.to_string |> String.rjust(2, ?0)
     day = date.day
-    Timex.parse!(
+    case Timex.parse(
       Enum.join([scheduled_time, year, month, day], " "),
       "%H:%M %Y %m %e",
       :strftime
-    )
+        ) do
+      {:ok, time} -> time
+      {:error, _readson} -> nil
+    end
   end
 
   # Gets correct status, and predicted time from status
@@ -277,6 +283,7 @@ defmodule Scraper do
   end
 
   def expand_status(data) do
+    Logger.debug data
     case data do
       "Confirm." -> "Confirmed"
       "Landed" -> "Landed"
