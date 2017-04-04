@@ -13,8 +13,11 @@
         <div class="column">
             <div class="ui fluid card">
                 <div class="content">
-                    <div class="header">
+                    <div class="ui header">
                         {{flight.location.name}}
+                        <div class="sub header">
+                            {{date flight.date}}
+                        </div>
                     </div>
                     <div class="description">
                         {{flight.number}} | {{flight.airline.name}}
