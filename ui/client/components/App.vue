@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<style scoped>
+<style>
 .slide-fade-enter-active {
   transition: all .2s ease;
 }
@@ -25,7 +25,23 @@
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for <2.1.8 */ {
-  transform: translateX(10px);
+  transform: translateY(10px);
   opacity: 0;
+}
+
+.list-item {
+    display: inline-block;
+    margin-right: 10px;
+}
+.list-enter-active, .list-leave-active {
+    transition: all 0.3s;
+}
+.list-enter, .list-leave-to /* .list-leave-active for <2.1.8 */ {
+    opacity: 0;
+    transform: translatey(30px);
+}
+
+.list-move {
+    transition: transform 0.6s;
 }
 </style>

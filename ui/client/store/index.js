@@ -39,7 +39,7 @@ const mutations = {
 const actions = {
   getUsefulFlights ({ commit }) {
     axios.get(URL + '/api/flights?useful=true').then((response) => {
-      commit('SET_FLIGHTS', { flights: response.data.flights });
+      commit('SET_USEFUL_FLIGHTS', { flights: response.data.flights });
     }, (err) => {
       alert("Could not fetch flights in useful order");
     });
