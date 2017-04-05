@@ -95,7 +95,6 @@ defmodule Scraper do
   end
 
   def add_status(status, flight_id) do
-    Logger.error flight_id
     latest_status = Status
     |> where(flight_id: ^flight_id)
     |> last
