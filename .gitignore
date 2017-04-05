@@ -32,6 +32,8 @@ backend/config/prod.secret.exs
 # compiled output
 ui/dist
 ui/tmp
+ui/.DS_STORE
+ui/*.log
 
 # dependencies
 ui/node_modules

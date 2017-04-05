@@ -24,7 +24,7 @@ defmodule Arrivals.Router do
   scope "/api", Arrivals do
     pipe_through :api
 
-    resources "/flights", FlightController, only: [:index]
+    resources "/flights", FlightController, only: [:index, :show]
     resources "/airlines", AirlineController, only: [:index]
   end
 end

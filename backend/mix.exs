@@ -41,7 +41,6 @@ defmodule Arrivals.Mixfile do
      {:floki, "~> 0.14.0"},
      {:httpoison, "~> 0.10.0"},
      {:cors_plug, "~> 1.2"},
-     {:ja_serializer, "~> 0.12.0"},
      {:timex, "~> 3.0"},
      {:timex_ecto, "~> 3.0"}]
   end
