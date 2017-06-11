@@ -1,8 +1,9 @@
 <template lang="html">
   <div class="ui stackable container grid">
     <div class="sixteen wide column">
-      <div class="ui fluid input">
+      <div class="ui fluid left icon input" :class="{ loading: filtering }">
         <input v-model="keyword" type="text" placeholder="Filter..."/>
+        <i class="search icon"></i>
       </div>
     </div>
     <div class="sixteen wide column">
@@ -16,6 +17,7 @@
 </template>
 
 <script lang="js">
+import _ from 'lodash';
 import FlightCard from 'components/FlightCard';
 
 export default {
@@ -24,28 +26,13 @@ export default {
   },
   data() {
     return {
-      keyword: ""
+      keyword: "",
+      filtering: false
     }
   },
   computed: {
-    flights() {
-      return this.$store.state.useful_flights;
-    },
     filteredFlights() {
-      if (this.keyword === "") {
-        return this.$store.state.useful_flights;
-      }
-
-      let keyword = this.keyword.toLowerCase();
-      return this.$store.state.useful_flights.filter(function (item) {
-        return item.date.indexOf(keyword) > -1 ||
-          item.number.toLowerCase().indexOf(keyword) > -1 ||
-          item.scheduled_time.indexOf(keyword) > -1 ||
-          item.airline.name.toLowerCase().indexOf(keyword) > -1 ||
-          item.location.name.toLowerCase().indexOf(keyword) > -1 ||
-          item.latest_status.name.toLowerCase().indexOf(keyword) > -1 ||
-          String(item.latest_status.real_time).indexOf(keyword) > -1;
-      });
+      return this.$store.getters.getUsefulFlightsByKeywords(this.keyword);
     }
   },
   created: function () {

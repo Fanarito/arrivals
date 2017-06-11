@@ -2,6 +2,14 @@
   <div class="ui internally celled stackable container grid">
     <div class="row">
       <div class="column">
+        <button @click="$router.back()" class="ui basic primary labeled icon button">
+          <i class="left arrow icon"></i>
+          Back
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
         <FlightCard :flight=flight></FlightCard>
       </div>
     </div>
@@ -44,7 +52,7 @@ export default {
       return this.$store.getters.getFlightById(this.$route.params.id);
     }
   },
-  mounted: function () {
+  created: function () {
     this.$store.dispatch('getFlightDetails', this.$route.params.id);
   }
 }
