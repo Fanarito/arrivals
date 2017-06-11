@@ -26,13 +26,26 @@ export default {
   data() {
     return {
       keyword: "",
+      debouncedKeyword: "",
       filtering: false
     }
   },
   computed: {
     filteredFlights() {
-      return this.$store.getters.getFlightsByKeywords(this.keyword);
+      return this.$store.getters.getFlightsByKeywords(this.debouncedKeyword);
     }
+  },
+  watch: {
+    keyword: function () {
+      this.filtering = true;
+      this.updateKeyword();
+    }
+  },
+  methods: {
+    updateKeyword: _.debounce(function () {
+      this.debouncedKeyword = this.keyword;
+      this.filtering = false;
+    })
   },
   created: function () {
     this.$store.dispatch('getFlights');
