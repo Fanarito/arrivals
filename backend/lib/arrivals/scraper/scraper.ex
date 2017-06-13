@@ -161,6 +161,7 @@ defmodule Scraper do
         case latest_status do
           nil ->
             Arrivals.Repo.insert!(status)
+            # Phoenix.Channel.broadcast("flight_channel")
           _ ->
             Logger.debug "status already in"
         end
@@ -168,8 +169,10 @@ defmodule Scraper do
   end
 
   defp parse_row(row) do
-    [date_string, number, airline_string, location_string, sc_time_string, status_string | _] =
-      Floki.find(row, "td") |> Enum.concat(["None"]) |> Floki.text(sep: "|") |> String.split("|")
+    [date_string, number, airline_string,
+     location_string, sc_time_string, status_string] = for v <- Floki.find(row, "td") do
+      if Floki.text(v) == "", do: "None", else: Floki.text(v)
+    end
 
     date = parse_date(date_string)
     scheduled_time = parse_time(sc_time_string, date)
