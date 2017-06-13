@@ -2,7 +2,9 @@
   <div id="app">
     <div class="ui segment">
       <transition name="slide-fade" mode="out-in">
-        <router-view></router-view>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
       </transition>
     </div>
 

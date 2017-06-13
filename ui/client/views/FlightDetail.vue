@@ -52,7 +52,7 @@ export default {
       return this.$store.getters.getFlightById(this.$route.params.id);
     }
   },
-  created: function () {
+  activated: function () {
     this.$store.dispatch('getFlightDetails', this.$route.params.id);
   }
 }
