@@ -18,7 +18,7 @@ defmodule Scraper do
   end
 
   def init(state) do
-    handle_info()
+    handle_info(:work, state)
     {:ok, state}
   end
 
