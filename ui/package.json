@@ -26,6 +26,7 @@
     "js-data": "^2.10.0",
     "js-data-http": "^2.2.2",
     "lodash": "^4.17.4",
+    "phoenix-elixir": "^1.2.1",
     "promise-polyfill": "^6.0.2",
     "vbuild": "^6.24.13",
     "vue": "^2.2.0",

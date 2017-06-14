@@ -3,6 +3,7 @@ defmodule Arrivals.UserSocket do
 
   ## Channels
   # channel "room:*", Arrivals.RoomChannel
+  channel "flight:*", Arrivals.FlightChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

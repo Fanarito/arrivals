@@ -5,6 +5,8 @@ defmodule Arrivals.Flight do
   alias Arrivals.Airline
   alias Arrivals.Location
   alias Arrivals.Status
+  alias Arrivals.Flight
+  alias Arrivals.Repo
 
   schema "flights" do
     field :date, Timex.Ecto.Date
@@ -30,6 +32,24 @@ defmodule Arrivals.Flight do
       join: s1 in assoc(f, :statuses),
       left_join: s2 in Status, on: f.id == s2.flight_id and s1.id < s2.id,
       where: is_nil(s2.id)
+  end
+
+  def show_flight_query(flight_id) do
+    query = from f in Flight,
+      join: s1 in assoc(f, :statuses),
+      left_join: s2 in Status, on: f.id == s2.flight_id and s1.id < s2.id,
+      join: a in Airline, on: a.id == f.airline_id,
+      join: l in Location, on: l.id == f.location_id,
+      where: is_nil(s2.id),
+      where: f.id == ^flight_id,
+      select: %{ flight: f, latest_status: s1, airline: a, location: l}
+    flight = Repo.one(query)
+    statuses = Repo.all(Status.for_flight(flight.flight) |> order_by(desc: :inserted_at))
+
+    %{
+      flight: flight,
+      statuses: statuses
+    }
   end
 
   @doc """

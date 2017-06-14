@@ -41,16 +41,6 @@ defmodule Arrivals.FlightController do
   end
 
   def show(conn, params) do
-    query = from f in Flight,
-      join: s1 in assoc(f, :statuses),
-      left_join: s2 in Status, on: f.id == s2.flight_id and s1.id < s2.id,
-      join: a in Airline, on: a.id == f.airline_id,
-      join: l in Location, on: l.id == f.location_id,
-      where: is_nil(s2.id),
-      where: f.id == ^params["id"],
-      select: %{ flight: f, latest_status: s1, airline: a, location: l}
-    flight = Repo.one(query)
-    statuses = Repo.all(Status.for_flight(flight.flight) |> order_by(desc: :inserted_at))
-    render conn, "show.json", flight: flight, statuses: statuses
+    render conn, "show.json", Flight.show_flight_query(params["id"])
   end
 end

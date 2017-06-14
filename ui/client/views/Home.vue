@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     filteredFlights() {
-      return this.$store.getters.getUsefulFlightsByKeywords(this.debouncedKeyword);
+      return this.$store.getters.getFlightsByKeywords(this.debouncedKeyword);
     }
   },
   watch: {

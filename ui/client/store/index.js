@@ -3,11 +3,9 @@ import Vuex from 'vuex';
 import axios from 'axios';
 import _ from 'lodash';
 import Fuse from 'fuse.js';
+import { URL } from '../utils';
 
 Vue.use(Vuex);
-
-// If the mode is not production use localhost:4000
-const URL = (process.env.NODE_ENV === 'production' ? "" : "http://localhost:4000");
 
 function parseTime(flight) {
   let time = flight.latest_status.real_time;
@@ -111,6 +109,9 @@ const actions = {
     }, (err) => {
       alert("Could not fetch flights");
     });
+  },
+  updateFlights ({ commit }, flights) {
+    commit('UPDATE_FLIGHTS', { flights: flights });
   }
 };
 

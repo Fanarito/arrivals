@@ -18,7 +18,7 @@ defmodule Scraper do
   end
 
   def init(state) do
-    handle_info(:work, state)
+    handle_info()
     {:ok, state}
   end
 
@@ -146,6 +146,7 @@ defmodule Scraper do
     case latest_status do
       nil ->
         Arrivals.Repo.insert!(status)
+        broadcast_change(flight_id)
       _ ->
         real_time_query = if status.data.real_time == nil do
             dynamic([s], is_nil(s.real_time))
@@ -161,11 +162,16 @@ defmodule Scraper do
         case latest_status do
           nil ->
             Arrivals.Repo.insert!(status)
+            broadcast_change(flight_id)
             # Phoenix.Channel.broadcast("flight_channel")
           _ ->
             Logger.debug "status already in"
         end
     end
+  end
+
+  defp broadcast_change(flight_id) do
+    Arrivals.FlightChannel.broadcast_change(flight_id)
   end
 
   defp parse_row(row) do

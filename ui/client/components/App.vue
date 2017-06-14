@@ -32,7 +32,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="css">
 .slide-fade-enter-active {
     transition: all .2s ease;
 }
