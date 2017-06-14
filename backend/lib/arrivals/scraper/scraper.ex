@@ -26,7 +26,7 @@ defmodule Scraper do
     Process.send_after(self(), :work, 5 * 60 * 1000) # every 5 minutes
   end
 
-  defp handle_info(:work, state) do
+  def handle_info(:work, state) do
     Logger.info "scraping now"
 
     Enum.each(@urls, &handle_url/1)
