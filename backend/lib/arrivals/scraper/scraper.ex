@@ -163,7 +163,6 @@ defmodule Scraper do
           nil ->
             Arrivals.Repo.insert!(status)
             broadcast_change(flight_id)
-            # Phoenix.Channel.broadcast("flight_channel")
           _ ->
             Logger.debug "status already in"
         end
@@ -175,10 +174,14 @@ defmodule Scraper do
   end
 
   defp parse_row(row) do
-    [date_string, number, airline_string,
-     location_string, sc_time_string, status_string] = for v <- Floki.find(row, "td") do
-      if Floki.text(v) == "", do: "None", else: Floki.text(v)
+    columns = for v <- Floki.find(row, "td") do
+      text = Floki.text(v)
+      IO.puts text
+      if text == "", do: "None", else: text
     end
+
+    [date_string, number, airline_string,
+     location_string, sc_time_string, status_string] = columns
 
     date = parse_date(date_string)
     scheduled_time = parse_time(sc_time_string, date)
@@ -186,6 +189,8 @@ defmodule Scraper do
     location_id = insert_location(location_string)
     [parsed_status, re_time] = parse_status(status_string, date)
     status = prepare_status(parsed_status, re_time)
+
+    IO.puts scheduled_time
 
     %{
       date: date,
@@ -278,13 +283,13 @@ defmodule Scraper do
     )
   end
 
-  defp parse_time(scheduled_time, date) do
-    Logger.debug scheduled_time
+  defp parse_time(time, date) do
+    Logger.debug time
     year = date.year
     month = date.month |> Integer.to_string |> String.rjust(2, ?0)
     day = date.day
     case Timex.parse(
-      Enum.join([scheduled_time, year, month, day], " "),
+      Enum.join([time, year, month, day], " "),
       "%H:%M %Y %m %e",
       :strftime
         ) do

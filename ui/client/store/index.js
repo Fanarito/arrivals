@@ -7,8 +7,7 @@ import { URL } from '../utils';
 
 Vue.use(Vuex);
 
-function parseTime(flight) {
-  let time = flight.latest_status.real_time;
+function parseTime(time) {
   if (time == null) {
     return "None";
   }
@@ -52,15 +51,15 @@ const state = {
   fuse: null,
   fuseOptions: {
     keys: ['number', 'latest_status.name', 'location.name', 'airline.name']
-  },
+  }
 };
 
 const mutations = {
   UPDATE_FLIGHTS: (state, { flights }) => {
     _.forEach(flights, function (flight) {
       // Add extra properties
-      Vue.set(flight, 'realTime', parseTime(flight));
-      Vue.set(flight, 'scheduledTime', parseTime(flight));
+      Vue.set(flight, 'realTime', parseTime(flight.latest_status.real_time));
+      Vue.set(flight, 'scheduledTime', parseTime(flight.scheduled_time));
       Vue.set(flight, 'colorClass', colorClass(flight));
       Vue.set(flight, 'iconClass', iconClass(flight));
 
